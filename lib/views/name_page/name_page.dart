@@ -49,69 +49,89 @@ class NamePage extends StatelessWidget {
                     const SizedBox(
                       height: 25,
                     ),
-                    Form(
-                      key: formKey,
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Name can\'t be empty';
-                          } else {
-                            return null;
-                          }
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Name',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
-                        onSaved: (value) {
-                          _controller.setName(value);
-                        },
-                        onFieldSubmitted: (value){
-                          FocusScope.of(context).unfocus();
-                          final isValid = formKey.currentState!.validate();
-                          if (isValid) {
-                            formKey.currentState!.save();
-                            final message = 'Welcome ${_controller.name}';
-                            Get.snackbar(
-                              'Done!',
-                              message,
-                              colorText: Colors.white,
-                              backgroundColor: Colors.green,
-                              snackPosition: SnackPosition.BOTTOM,
-                              borderRadius: 15,
-                              icon: const Icon(
-                                Icons.info_outline,
-                                color: Colors.white,
-                              ),
-                              duration: const Duration(milliseconds: 1500),
-                            );
+                    buildForm(context),
+                    const SizedBox(height: 30),
+                    buildElevatedButton(context)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-                            Get.to(() => QuizPage());
+  ElevatedButton buildElevatedButton(BuildContext context) {
+    return ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                      ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed)) {
+                            return Colors.blue;
                           }
+                          return Colors.blue;
                         },
+                      ),
+                      minimumSize: MaterialStateProperty.all<Size>(
+                        const Size(double.infinity, 50),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return Colors.blue;
-                            }
-                            return Colors.blue;
-                          },
-                        ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          const Size(double.infinity, 50),
-                        ),
+                    onPressed: ()  {
+                      FocusScope.of(context).unfocus();
+                      final isValid = formKey.currentState!.validate();
+                      if (isValid) {
+                        formKey.currentState!.save();
+                        final message = 'Welcome ${_controller.name}';
+                        Get.snackbar(
+                          'Done!',
+                          message,
+                          colorText: Colors.white,
+                          backgroundColor: Colors.green,
+                          snackPosition: SnackPosition.BOTTOM,
+                          borderRadius: 15,
+                          icon: const Icon(
+                            Icons.info_outline,
+                            color: Colors.white,
+                          ),
+                          duration: const Duration(milliseconds: 1500),
+                        );
+
+                        Get.to(() => QuizPage());
+                      }
+                    },
+                    child: Text(
+                      'Let\'s start! ',
+                      textAlign: TextAlign.center,
+                      style: subTitleStyle,
+                    ),
+                  );
+  }
+
+  Form buildForm(BuildContext context) {
+    return Form(
+                    key: formKey,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Name can\'t be empty';
+                        } else {
+                          return null;
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Name',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
                       ),
-                      onPressed: ()  {
+                      onSaved: (value) {
+                        _controller.setName(value);
+                      },
+                      onFieldSubmitted: (value){
                         FocusScope.of(context).unfocus();
                         final isValid = formKey.currentState!.validate();
                         if (isValid) {
@@ -134,19 +154,7 @@ class NamePage extends StatelessWidget {
                           Get.to(() => QuizPage());
                         }
                       },
-                      child: Text(
-                        'Let\'s start! ',
-                        textAlign: TextAlign.center,
-                        style: subTitleStyle,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+                    ),
+                  );
   }
 }
